@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Имба калькулятор</title>
+</head>
+<body>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% else %}
+        <p>Коэффициенты: a={{ a }}, b={{ b }}, c={{ c }}</p>
+        {% if root %}
+            <p>Корень: {{ root }}</p>
+        {% else %}
+            <p>Корни: {{ root1 }}, {{ root2 }}</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
