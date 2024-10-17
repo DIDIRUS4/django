@@ -6,6 +6,8 @@
 <body>
     {% if error %}
         <p>{{ error }}</p>
+    {% elif ok %}
+        <p>{{ ok }}</p>
     {% else %}
         <p>Коэффициенты: a={{ a }}, b={{ b }}, c={{ c }}</p>
         {% if root %}

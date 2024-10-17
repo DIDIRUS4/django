@@ -25,7 +25,7 @@ class Main(View):
         if a == 0:
             if b == 0:
                 if c == 0:
-                    return render(request, 'index.html', {'error': 'Все коэффициенты равны 0'})
+                    return render(request, 'index.html', {'ok': 'Бесконечное количество решений'})
                 else:
                     return render(request, 'index.html', {'error': 'Нет решений'})
             else:
