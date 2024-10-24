@@ -29,74 +29,62 @@ class Main(View):
             b = request.GET.get('b')
             c = request.GET.get('c')
         elif request.method == 'POST':
-            a = request.POST.get('a')
-            b = request.POST.get('b')
-            c = request.POST.get('c')
+            a = float(request.POST.get('a'))
+            b = float(request.POST.get('b'))
+            c = float(request.POST.get('c'))
+            
+        if (name == 'solve'):
         # print(a, b, c)
-        if a is None or b is None or c is None:
-            if name == 'education':
-                return render(request, 'education.html', {'error': 'Не все коэффициенты заданы'})
-            else:
+            if a is None or b is None or c is None:
                 return render(request, 'index.html', {'error': 'Не все коэффициенты заданы'})
-        try:
-            a = float(a)
-            b = float(b)
-            c = float(c)
-        except ValueError:
-            if name == 'education':
-                return render(request, 'education.html', {'error': 'Коэффициенты должны быть числами'})
-            else:
+            try:
+                a = float(a)
+                b = float(b)
+                c = float(c)
+            except ValueError:
                 return render(request, 'index.html', {'error': 'Коэффициенты должны быть числами'})
-        if a == 0:
-            if b == 0:
-                if c == 0:
-                    if name == 'education':
-                        return render(request, 'education.html', {'unresolved': 'Бесконечное количество решений'})
-                    else:
+            if a == 0:
+                if b == 0:
+                    if c == 0:
                         return render(request, 'index.html', {'ok': 'Бесконечное количество решений'})
-                else:
-                    if name == 'education':
-                        return render(request, 'education.html', {'error': 'Нет решений'})
                     else:
                         return render(request, 'index.html', {'error': 'Нет решений'})
-            else:
-                root = -c / b
-                calc = Calculator(a=a, b=b, c=c, root1=root)
-                calc.save()
-                # with connection.cursor() as cursor:
-                    # cursor.execute("INSERT INTO second_calculator (a, b, c, root1) VALUES (%s, %s, %s, %s)", (a, b, c, root))
-                if name == 'education':
-                    return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root': root})
                 else:
+                    root = -c / b
                     return render(request, 'index.html', {'a': a, 'b': b, 'c': c, 'root': root})
-        else:
-            discriminant = b ** 2 - 4 * a * c
-            if discriminant < 0:
-                if name == 'education':
-                    return render(request, 'education.html', {'error': 'Нет решений'})
-                else:
+            else:
+                discriminant = b ** 2 - 4 * a * c
+                if discriminant < 0:
                     return render(request, 'index.html', {'error': 'Нет решений'})
-            elif discriminant == 0:
-                root = -b / (2 * a)
-                calc = Calculator(a=a, b=b, c=c, root1=root)
-                calc.save()
-                # with connection.cursor() as cursor:
-                #     cursor.execute("INSERT INTO second_calculator (a, b, c, root1) VALUES (%s, %s, %s, %s)", (a, b, c, root))
-                if name == 'education':
-                    return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root': root})
-                else:
+                elif discriminant == 0:
+                    root = -b / (2 * a)
                     return render(request, 'index.html', {'a': a, 'b': b, 'c': c, 'root': root})
-            else:
-                root1 = (-b + discriminant ** 0.5) / (2 * a)
-                root2 = (-b - discriminant ** 0.5) / (2 * a)
-                calc = Calculator(a=a, b=b, c=c, root1=root1, root2=root2)
-                calc.save()
-                # with connection.cursor() as cursor:
-                #     cursor.execute("INSERT INTO second_calculator (a, b, c, root1, root2) VALUES (%s, %s, %s, %s, %s)", (a, b, c, root1, root2))
-                if name == 'education':
-                    return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root1': root1, 'root2': root2})
                 else:
+                    root1 = (-b + discriminant ** 0.5) / (2 * a)
+                    root2 = (-b - discriminant ** 0.5) / (2 * a)
                     return render(request, 'index.html', {'a': a, 'b': b, 'c': c, 'root1': root1, 'root2': root2})
+        elif (name == 'education'):
+            root1 = float(request.POST.get('root1'))
+            root2 = float(request.POST.get('root2'))
+            isCorrectStatus = False
+            discriminant = b ** 2 - 4 * a * c
+            if discriminant < 0 and root1 == 0 and root2 == 0:
+                isCorrectStatus = True
+            elif discriminant == 0:
+                if round(root1, 2) == round(-b / (2 * a), 2):
+                    isCorrectStatus = True
+            else:
+                if round(root1, 2) == round((-b + discriminant ** 0.5) / (2 * a), 2) and round(root2, 2) == round((-b - discriminant ** 0.5) / (2 * a), 2):
+                    isCorrectStatus = True
+                    
+            calc = Calculator(a=a, b=b, c=c, root1=root1, root2=root2, isCorrect=isCorrectStatus)
+            calc.save()
+            
+            if (isCorrectStatus):
+                return render(request, 'education.html', {'ok': 'Ваш ответ является решением'})
+            else:
+                return render(request, 'education.html', {'error': 'Ваш ответ не является решением', 'correct': 'Правильное решение: ' + str(a) + 'x^2 + ' + str(b) + 'x + ' + str(c) + ' имеет корни ' + str(round((-b + discriminant ** 0.5) / (2 * a), 2)) + ' и ' + str(round((-b - discriminant ** 0.5) / (2 * a), 2))})
+            
 
     def get(self, request):
         name = request.resolver_match.url_name

@@ -6,19 +6,20 @@
     <input type="number" name="b" id="b" value="0" min="-100" max="100"><br>
     <label for="c">c</label>
     <input type="number" name="c" id="c" value="0" min="-100" max="100"><br>
-    <button type="submit" >Вычислить</button>
     <button type="button" onclick="generate()">Сгенерировать</button>
+    <br>
+    <label for="root1">Корень 1</label>
+    <input type="text" name="root1" id="root1" value="{{ root1 }}" required><br>
+    <label for="root2">Корень 2</label>
+    <input type="text" name="root2" id="root2" value="{{ root2 }}" required><br>
+    <button type="submit">Отправить решение</button>
+    <button type="submit" name="noans" onclick="document.getElementById('root1').value=0.0;document.getElementById('root2').value=0.0;">Нет решений</button>
+    <br>
     {% if error %}
         <p>{{ error }}</p>
-    {% elif unresolved %}
-        <p>{{ unresolved }}</p>
-    {% elif success %}
-        <p>Коэффициенты: a={{ a }}, b={{ b }}, c={{ c }}</p>
-        {% if root %}
-            <p>Корень: {{ root }}</p>
-        {% else %}
-            <p>Корни: {{ root1 }}, {{ root2 }}</p>
-        {% endif %}
+        <p>{{ correct }}</p>
+    {% elif ok %}
+        <p>{{ ok }}</p>
     {% endif %}
     <script>
         function generate() {

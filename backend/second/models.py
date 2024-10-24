@@ -5,6 +5,7 @@ class Calculator(models.Model):
     a = models.FloatField()
     b = models.FloatField()
     c = models.FloatField()
+    isCorrect = models.BooleanField(default=False)
     root1 = models.FloatField(blank=True, null=True)
     root2 = models.FloatField(blank=True, null=True)
 
