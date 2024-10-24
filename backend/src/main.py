@@ -1,11 +1,23 @@
 from django.views.generic import View
 from django.shortcuts import render
+from django.db import connection
 
 
 class Main(View):
 
     def __init__(self) -> None:
         pass
+
+    def fetch_data(self) -> list:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM calculator")
+            rows = cursor.fetchall()
+            # for row in rows:
+            #     print(row)
+            return rows
+    
+    def getDBData(self, request):
+        return render(request, 'monitor.html', {'data': self.fetch_data()})
 
     def solver(self, request, name):
         a = None
@@ -19,7 +31,7 @@ class Main(View):
             a = request.POST.get('a')
             b = request.POST.get('b')
             c = request.POST.get('c')
-        print(a, b, c)
+        # print(a, b, c)
         if a is None or b is None or c is None:
             if name == 'education':
                 return render(request, 'education.html', {'error': 'Не все коэффициенты заданы'})
@@ -48,6 +60,8 @@ class Main(View):
                         return render(request, 'index.html', {'error': 'Нет решений'})
             else:
                 root = -c / b
+                with connection.cursor() as cursor:
+                    cursor.execute("INSERT INTO calculator (a, b, c, root1) VALUES (%s, %s, %s, %s)", (a, b, c, root))
                 if name == 'education':
                     return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root': root})
                 else:
@@ -61,6 +75,8 @@ class Main(View):
                     return render(request, 'index.html', {'error': 'Нет решений'})
             elif discriminant == 0:
                 root = -b / (2 * a)
+                with connection.cursor() as cursor:
+                    cursor.execute("INSERT INTO calculator (a, b, c, root1) VALUES (%s, %s, %s, %s)", (a, b, c, root))
                 if name == 'education':
                     return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root': root})
                 else:
@@ -68,6 +84,8 @@ class Main(View):
             else:
                 root1 = (-b + discriminant ** 0.5) / (2 * a)
                 root2 = (-b - discriminant ** 0.5) / (2 * a)
+                with connection.cursor() as cursor:
+                    cursor.execute("INSERT INTO calculator (a, b, c, root1, root2) VALUES (%s, %s, %s, %s, %s)", (a, b, c, root1, root2))
                 if name == 'education':
                     return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root1': root1, 'root2': root2})
                 else:
@@ -79,8 +97,9 @@ class Main(View):
             return render(request, 'education.html')
         elif name == 'solve':
             return self.solver(request, name)
+        elif name == 'monitor':
+            return self.getDBData(request)
 
-    
 
     def post(self, request):
         name = request.resolver_match.url_name
