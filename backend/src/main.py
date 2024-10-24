@@ -1,5 +1,6 @@
 from django.views.generic import View
 from django.shortcuts import render
+from second.models import Calculator
 from django.db import connection
 
 
@@ -10,7 +11,7 @@ class Main(View):
 
     def fetch_data(self) -> list:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM calculator")
+            cursor.execute("SELECT * FROM second_calculator")
             rows = cursor.fetchall()
             # for row in rows:
             #     print(row)
@@ -60,8 +61,10 @@ class Main(View):
                         return render(request, 'index.html', {'error': 'Нет решений'})
             else:
                 root = -c / b
-                with connection.cursor() as cursor:
-                    cursor.execute("INSERT INTO calculator (a, b, c, root1) VALUES (%s, %s, %s, %s)", (a, b, c, root))
+                calc = Calculator(a=a, b=b, c=c, root1=root)
+                calc.save()
+                # with connection.cursor() as cursor:
+                    # cursor.execute("INSERT INTO second_calculator (a, b, c, root1) VALUES (%s, %s, %s, %s)", (a, b, c, root))
                 if name == 'education':
                     return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root': root})
                 else:
@@ -75,8 +78,10 @@ class Main(View):
                     return render(request, 'index.html', {'error': 'Нет решений'})
             elif discriminant == 0:
                 root = -b / (2 * a)
-                with connection.cursor() as cursor:
-                    cursor.execute("INSERT INTO calculator (a, b, c, root1) VALUES (%s, %s, %s, %s)", (a, b, c, root))
+                calc = Calculator(a=a, b=b, c=c, root1=root)
+                calc.save()
+                # with connection.cursor() as cursor:
+                #     cursor.execute("INSERT INTO second_calculator (a, b, c, root1) VALUES (%s, %s, %s, %s)", (a, b, c, root))
                 if name == 'education':
                     return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root': root})
                 else:
@@ -84,8 +89,10 @@ class Main(View):
             else:
                 root1 = (-b + discriminant ** 0.5) / (2 * a)
                 root2 = (-b - discriminant ** 0.5) / (2 * a)
-                with connection.cursor() as cursor:
-                    cursor.execute("INSERT INTO calculator (a, b, c, root1, root2) VALUES (%s, %s, %s, %s, %s)", (a, b, c, root1, root2))
+                calc = Calculator(a=a, b=b, c=c, root1=root1, root2=root2)
+                calc.save()
+                # with connection.cursor() as cursor:
+                #     cursor.execute("INSERT INTO second_calculator (a, b, c, root1, root2) VALUES (%s, %s, %s, %s, %s)", (a, b, c, root1, root2))
                 if name == 'education':
                     return render(request, 'education.html', {'success': True, 'a': a, 'b': b, 'c': c, 'root1': root1, 'root2': root2})
                 else:
