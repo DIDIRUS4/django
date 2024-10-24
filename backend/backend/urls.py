@@ -21,6 +21,7 @@ from src.main import Main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('solve/', Main.as_view()),
-]   
+    path('solve/', Main.as_view(), name='solve'),
+    path('education/', Main.as_view(), name='education'),
+]
 
