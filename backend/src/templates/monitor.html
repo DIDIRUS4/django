@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мониторинг</title>
+</head>
+<body>
+    <h1>Мониторинг</h1>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            border-radius: 10px 0 0 10px;
+        }
+        tr:nth-child(even) td:first-child {
+            border-radius: 0 10px 10px 0;
+        }
+        tr:nth-child(odd) td:last-child {
+            border-radius: 10px 0 0 10px;
+        }
+    </style>
+    <table>
+        <tr>
+            <th>a</th>
+            <th>b</th>
+            <th>c</th>
+            <th>root1</th>
+            <th>root2</th>
+        </tr>
+        {% for row in data %}
+            <tr>
+                <td>{{ row.0 }}</td>
+                <td>{{ row.1 }}</td>
+                <td>{{ row.2 }}</td>
+                <td>{{ row.3 }}</td>
+                <td>{{ row.4 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

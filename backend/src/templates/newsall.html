@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>{{ news.title }}</title>
+</head>
+<body>
+    <header>
+        <h1>Новостной сайт</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Главная</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="news-container">
+        {% for news in news_list %}
+        <div class="news-item">
+            <p class="news-title"><a href="?news_id={{ news.id }}">{{ news.title }}</a></p>
+            <img class="news-image" src="{{ news.image_url }}" alt="Изображение типа">
+            <p class="news-date"><small>Опубликовано: {{ news.published_date }}</small></p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="pagination">
+        <span class="step-links">
+            {% if news_list.has_previous %}
+            <a href="?page=1">&laquo; В начало</a>
+            <a href="?page={{ news_list.previous_page_number }}">Назад</a>
+            {% endif %}
+    
+            <span class="current">
+                Страница {{ news_list.number }} из {{ news_list.paginator.num_pages }}.
+            </span>
+    
+            {% if news_list.has_next %}
+            <a href="?page={{ news_list.next_page_number }}">Вперед</a>
+            <a href="?page={{ news_list.paginator.num_pages }}">В Конец &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+
