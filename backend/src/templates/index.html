@@ -1,20 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Имба калькулятор</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    
+    <title>Очень полезный сайт (реально)</title>
 </head>
 <body>
-    {% if error %}
-        <p>{{ error }}</p>
-    {% elif ok %}
-        <p>{{ ok }}</p>
-    {% else %}
-        <p>Коэффициенты: a={{ a }}, b={{ b }}, c={{ c }}</p>
-        {% if root %}
-            <p>Корень: {{ root }}</p>
-        {% else %}
-            <p>Корни: {{ root1 }}, {{ root2 }}</p>
-        {% endif %}
-    {% endif %}
+    <header>
+        <h1>Имба сайтик :)</h1>
+        <nav>
+            <ul>
+                <li><a href="">Главная</a></li>
+                <li><a href="solve">Примеры</a></li>
+                <li><a href="education">Решение уравнений</a></li>
+                <li><a href="news">Новости</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    
 </body>
 </html>
+
+

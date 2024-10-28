@@ -24,5 +24,7 @@ urlpatterns = [
     path('solve/', Main.as_view(), name='solve'),
     path('education/', Main.as_view(), name='education'),
     path('monitor/', Main.as_view(), name='monitor'),
+    path('news/', Main.as_view(), name='news'),
+    path('', Main.as_view())
 ]
 
