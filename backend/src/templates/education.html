@@ -1,3 +1,15 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+<header>
+    <h1>Тренажер</h1>
+    <nav>
+        <ul>
+            <li><a href="/">Главная</a></li>
+        </ul>
+    </nav>
+</header>
+
 <form method="post">
     {% csrf_token %}
     <label for="a">a</label>

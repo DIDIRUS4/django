@@ -2,8 +2,18 @@
 <html>
 <head>
     <title>Имба калькулятор</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
+    <header>
+        <h1>Имба калькулятор</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Главная</a></li>
+            </ul>
+        </nav>
+    </header>
     {% if error %}
         <p>{{ error }}</p>
     {% elif ok %}
